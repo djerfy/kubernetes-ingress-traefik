@@ -1,0 +1,114 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: traefik-config
+  namespace: kube-system
+  labels:
+    app: traefik-ingress
+data:
+  traefik.toml: |
+    # Global settings
+    [global]
+      checkNewVersion = false
+      sendAnonymousUsage = false
+    # Servers transport settings
+    [serversTransport]
+      insecureSkipVerify = true
+    # Entrypoints settings
+    [entryPoints]
+      [entryPoints.http]
+        address = ":80"
+      [entryPoints.https]
+        address = ":443"
+      [entryPoints.traefik]
+        address = ":8080"
+      [entryPoints.monitoring]
+        address = ":9090"
+    # Logs settings
+    [log]
+      level = "ERROR"
+      format = "json"
+    [accessLog]
+      format = "json"
+    # API dashboard settings
+    [api]
+      dashboard = true
+      debug = false
+      insecure = true
+    # Monitoring settings
+    [ping]
+      entryPoint = "monitoring"
+    # Providers settings
+    [providers]
+      [providers.file]
+        directory = "/custom/"
+        watch = true
+      [providers.kubernetesCRD]
+    # Metrics settings
+    [metrics]
+      [metrics.prometheus]
+        addEntryPointsLabels = true
+        addServicesLabels = true
+        entryPoint = "traefik"
+    # Certificates settings
+    [certificatesResolvers]
+      # Environment production
+      [certificatesResolvers.letsencrypt]
+        [certificatesResolvers.letsencrypt.acme]
+          email = "hello@xorhak.io"
+          storage = "/certs/letsencrypt.json"
+          caServer = "https://acme-v02.api.letsencrypt.org/directory"
+          [certificatesResolvers.letsencrypt.acme.httpChallenge]
+            entryPoint = "http"
+      # Environment staging
+      [certificatesResolvers.letsencrypt-staging]
+        [certificatesResolvers.letsencrypt-staging.acme]
+          email = "hello@xorhak.io"
+          storage = "/certs/letsencrypt-staging.json"
+          caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
+          [certificatesResolvers.letsencrypt-staging.acme.httpChallenge]
+            entryPoint = "http"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: traefik-custom
+  namespace: kube-system
+  labels:
+    app: traefik-ingress
+data:
+  tls.toml: |
+    # TLS settings
+    [tls]
+      [tls.options]
+        [tls.options.default]
+          minVersion = "VersionTLS12"
+        [tls.options.mintls13]
+          minVersion = "VersionTLS13"
+  middlewares.toml: |
+    # Middlewares settings
+    [http.middlewares]
+      # Redirect to HTTPS
+      [http.middlewares.redirect-https.redirectScheme]
+        scheme = "https"
+        permanent = true
+      # Remove default headers (security)
+      [http.middlewares.default-headers.headers]
+        [http.middlewares.default-headers.headers.customResponseHeaders]
+          X-Powered-By = ""
+          Server = ""
+      # Add default headers (security)
+      [http.middlewares.security-headers.headers]
+        AccessControlAllowOrigin = "null"
+        AccessControlMaxAge = 60
+        BrowserXssFilter = true
+        ContentTypeNoSniff = true
+        ForceSTSHeader = true
+        FrameDeny = true
+        SSLRedirect = true
+        STSIncludeSubdomains = true
+        STSPreload = true
+        STSSeconds = 315360000
+        CustomFrameOptionsValue = "SAMEORIGIN"
+        ReferrerPolicy = "same-origin"
+        FeaturePolicy = "vibrate 'self'"

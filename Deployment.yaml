@@ -1,0 +1,47 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: kube-system
+  name: traefik-ingress
+  labels:
+    app: traefik-ingress
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: traefik-ingress
+  template:
+    metadata:
+      labels:
+        app: traefik-ingress
+    spec:
+      serviceAccountName: traefik-ingress
+      containers:
+        - name: traefik
+          image: traefik:2.1
+          args:
+            - --configFile=/config/traefik.toml
+          volumeMounts:
+            - name: traefik-config
+              mountPath: /config/
+            - name: traefik-custom
+              mountPath: /custom/
+            - name: traefik-certs
+              mountPath: /certs/
+          ports:
+            - name: http
+              containerPort: 80
+            - name: https
+              containerPort: 443
+            - name: traefik
+              containerPort: 8080
+      volumes:
+        - name: traefik-config
+          configMap:
+            name: traefik-config
+        - name: traefik-custom
+          configMap:
+            name: traefik-custom
+        - name: traefik-certs
+          persistentVolumeClaim:
+            claimName: traefik-certs

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: traefik-certs
+  namespace: kube-system
+  labels:
+    app: traefik-ingress
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 32Mi
+  selector:
+    matchLabels:
+      app: traefik-ingress
