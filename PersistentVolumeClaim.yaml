@@ -7,11 +7,8 @@ metadata:
     app: traefik-ingress
 spec:
   accessModes:
-    - ReadWriteMany
-  storageClassName: ""
+    - ReadWriteOne
+  storageClassName: local-path
   resources:
     requests:
       storage: 32Mi
-  selector:
-    matchLabels:
-      app: traefik-ingress
