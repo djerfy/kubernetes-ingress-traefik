@@ -27,7 +27,7 @@ k3d create \
     --server-arg "--no-deploy=traefik"
 
 # wait few seconds
-sleep 10
+sleep 20
 
 # set kubeconfig
 export KUBECONFIG="$(k3d get-kubeconfig --name='traefik-ci')"
@@ -43,7 +43,7 @@ kubectl -n kube-system apply -f ./Service.yaml
 kubectl -n kube-system apply -f ./Deployment.yaml
 
 # wait few seconds
-sleep 20
+sleep 60
 
 # test traefik
 kubectl -n kube-system get pods \
