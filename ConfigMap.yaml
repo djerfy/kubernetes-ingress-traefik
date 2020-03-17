@@ -55,7 +55,7 @@ data:
       # Environment production
       [certificatesResolvers.letsencrypt]
         [certificatesResolvers.letsencrypt.acme]
-          email = "hello@xorhak.io"
+          email = "email@domain.tld"
           storage = "/certs/letsencrypt.json"
           caServer = "https://acme-v02.api.letsencrypt.org/directory"
           [certificatesResolvers.letsencrypt.acme.httpChallenge]
@@ -63,7 +63,7 @@ data:
       # Environment staging
       [certificatesResolvers.letsencrypt-staging]
         [certificatesResolvers.letsencrypt-staging.acme]
-          email = "hello@xorhak.io"
+          email = "email@domain.tld"
           storage = "/certs/letsencrypt-staging.json"
           caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
           [certificatesResolvers.letsencrypt-staging.acme.httpChallenge]
