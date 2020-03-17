@@ -7,16 +7,24 @@ VERSION_K3D="1.6.0"
 VERSION_KUBE="1.17.3"
 
 # create dir
-[ ! -e ".bin" ] && mkdir -p .bin
-export PATH=".bin:${PATH}"
+if [ ! -e ".bin" ]; then
+    mkdir -p .bin
+    export PATH=".bin:${PATH}"
+fi
 
 # install k3d
-wget https://github.com/rancher/k3d/releases/download/v${VERSION_K3D}/k3d-linux-amd64 \
-    -O .bin/k3d && chmod +x .bin/k3d
+if [ ! -e ".bin/k3d" ]; then
+    wget https://github.com/rancher/k3d/releases/download/v${VERSION_K3D}/k3d-linux-amd64 \
+        -O .bin/k3d
+    chmod +x .bin/k3d
+fi
 
 # install kubectl
-wget https://storage.googleapis.com/kubernetes-release/release/v${VERSION_KUBE}/bin/linux/amd64/kubectl \
-    -O .bin/kubectl && chmod +x .bin/kubectl
+if [ ! -e ".bin/kubectl" ]; then
+    wget https://storage.googleapis.com/kubernetes-release/release/v${VERSION_KUBE}/bin/linux/amd64/kubectl \
+        -O .bin/kubectl
+    chmod +x .bin/kubectl
+fi
 
 # create stack
 k3d create \
@@ -44,6 +52,9 @@ kubectl -n kube-system apply -f ./Deployment.yaml
 
 # wait few seconds
 sleep 60
+
+# display
+kubectl -n kube-system get pods
 
 # test traefik
 kubectl -n kube-system get pods \
