@@ -5,4 +5,5 @@ metadata:
   namespace: kube-system
 spec:
   basicAuth:
+    realm: "Traefik Dashboard"
     secret: traefik-dashboard-authentication
