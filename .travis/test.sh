@@ -1,8 +1,13 @@
 #!/bin/bash
 
+set -xe
+
 # tools version
 VERSION_K3D="1.6.0"
 VERSION_KUBE="1.17.3"
+
+# create dir
+[ ! -e "/usr/local/bin" ] && mkdir -p /usr/local/bin
 
 # install k3d
 wget https://github.com/rancher/k3d/releases/download/v${VERSION_K3D}/k3d-linux-amd64 \
