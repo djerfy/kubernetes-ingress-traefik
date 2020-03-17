@@ -1,16 +1,22 @@
 #!/bin/bash
 
+set -xe
+
 # tools version
 VERSION_K3D="1.6.0"
 VERSION_KUBE="1.17.3"
 
+# create dir
+[ ! -e ".bin" ] && mkdir -p .bin
+export PATH=".bin:${PATH}"
+
 # install k3d
 wget https://github.com/rancher/k3d/releases/download/v${VERSION_K3D}/k3d-linux-amd64 \
-    -O /usr/local/bin/k3d && chmod +x /usr/local/bin/k3d
+    -O .bin/k3d && chmod +x .bin/k3d
 
 # install kubectl
 wget https://storage.googleapis.com/kubernetes-release/release/v${VERSION_KUBE}/bin/linux/amd64/kubectl \
-    -O /usr/local/bin/kubectl && chmod +x /usr/local/bin/kubectl
+    -O .bin/kubectl && chmod +x .bin/kubectl
 
 # create stack
 k3d create \
@@ -21,7 +27,7 @@ k3d create \
     --server-arg "--no-deploy=traefik"
 
 # wait few seconds
-sleep 10
+sleep 20
 
 # set kubeconfig
 export KUBECONFIG="$(k3d get-kubeconfig --name='traefik-ci')"
@@ -37,7 +43,7 @@ kubectl -n kube-system apply -f ./Service.yaml
 kubectl -n kube-system apply -f ./Deployment.yaml
 
 # wait few seconds
-sleep 20
+sleep 60
 
 # test traefik
 kubectl -n kube-system get pods \
