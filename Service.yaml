@@ -21,7 +21,20 @@ spec:
     protocol: TCP
     targetPort: 443
     nodePort: 30443
-  - name: traefik
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-dashboard
+  namespace: kube-system
+  labels:
+    app: traefik-ingress
+spec:
+  selector:
+    app: traefik-ingress
+  type: ClusterIP
+  ports:
+  - name: dashboard
     port: 8080
     protocol: TCP
     targetPort: 8080

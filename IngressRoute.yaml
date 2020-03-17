@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dashboard-http
+  namespace: kube-system
+spec:
+  entrypoints:
+  - http
+  routes:
+  - match: Host(`traefik-dashboard.domain.tld`)
+    kind: Rule
+    services:
+    - name: traefik-dashboard
+      port: 8080
+    middlewares:
+    - name: traefik-dashboard-authentication
