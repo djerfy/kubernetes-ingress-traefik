@@ -26,6 +26,11 @@ if [ ! -e ".bin/kubectl" ]; then
     chmod +x .bin/kubectl
 fi
 
+# check stack
+if [ "$(k3d list | grep -c 'traefik-ci')" -eq "1" ]; then
+    k3d delete --name traefik-ci
+fi
+
 # create stack
 k3d create \
     --name traefik-ci \
