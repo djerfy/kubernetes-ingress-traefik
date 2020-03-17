@@ -53,7 +53,10 @@ kubectl -n kube-system apply -f ./CustomResourceDefinition.yaml
 kubectl -n kube-system apply -f ./PersistentVolumeClaim.yaml
 kubectl -n kube-system apply -f ./ConfigMap.yaml
 kubectl -n kube-system apply -f ./Service.yaml
+kubectl -n kube-system apply -f ./Secret.yaml
 kubectl -n kube-system apply -f ./Deployment.yaml
+kubectl -n kube-system apply -f ./Middleware.yaml
+kubectl -n kube-system apply -f ./IngressRoute.yaml
 
 # wait few seconds
 sleep 60
