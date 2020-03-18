@@ -1,0 +1,9 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-dashboard-authentication
+  namespace: kube-system
+spec:
+  basicAuth:
+    realm: "Traefik Dashboard"
+    secret: traefik-dashboard-authentication
