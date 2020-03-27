@@ -18,7 +18,7 @@ spec:
       serviceAccountName: traefik-ingress
       containers:
         - name: traefik
-          image: traefik:2.1
+          image: traefik:2.2
           args:
             - --configFile=/config/traefik.toml
           volumeMounts:
