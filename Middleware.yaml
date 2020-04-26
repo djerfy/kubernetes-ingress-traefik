@@ -7,3 +7,45 @@ spec:
   basicAuth:
     realm: "Traefik Dashboard"
     secret: traefik-dashboard-authentication
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-redirect-https
+  namespace: kube-system
+spec:
+  redirectScheme:
+    scheme: "https"
+    permanent: true
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-default-headers
+  namespace: kube-system
+spec:
+  headers:
+    customResponseHeaders:
+      X-Powered-By: ""
+      Server: ""
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-security-headers
+  namespace: kube-system
+spec:
+  headers:
+    AccessControlAllowOrigin: "null"
+    AccessControlMaxAge: 60
+    BrowserXssFilter: true
+    ContentTypeNoSniff: true
+    ForceSTSHeader: true
+    FrameDeny: true
+    SSLRedirect: true
+    STSIncludeSubdomains: true
+    STSPreload: true
+    STSSeconds: 315360000
+    CustomFrameOptionsValue: "SAMEORIGIN"
+    ReferrerPolicy: "same-origin"
+    FeaturePolicy: "vibrate 'self'"

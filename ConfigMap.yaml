@@ -40,9 +40,6 @@ data:
       entryPoint = "monitoring"
     # Providers settings
     [providers]
-      [providers.file]
-        directory = "/custom/"
-        watch = true
       [providers.kubernetesCRD]
     # Metrics settings
     [metrics]
@@ -68,47 +65,3 @@ data:
           caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
           [certificatesResolvers.letsencrypt-staging.acme.httpChallenge]
             entryPoint = "http"
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: traefik-custom
-  namespace: kube-system
-  labels:
-    app: traefik-ingress
-data:
-  tls.toml: |
-    # TLS settings
-    [tls]
-      [tls.options]
-        [tls.options.default]
-          minVersion = "VersionTLS12"
-        [tls.options.mintls13]
-          minVersion = "VersionTLS13"
-  middlewares.toml: |
-    # Middlewares settings
-    [http.middlewares]
-      # Redirect to HTTPS
-      [http.middlewares.redirect-https.redirectScheme]
-        scheme = "https"
-        permanent = true
-      # Remove default headers (security)
-      [http.middlewares.default-headers.headers]
-        [http.middlewares.default-headers.headers.customResponseHeaders]
-          X-Powered-By = ""
-          Server = ""
-      # Add default headers (security)
-      [http.middlewares.security-headers.headers]
-        AccessControlAllowOrigin = "null"
-        AccessControlMaxAge = 60
-        BrowserXssFilter = true
-        ContentTypeNoSniff = true
-        ForceSTSHeader = true
-        FrameDeny = true
-        SSLRedirect = true
-        STSIncludeSubdomains = true
-        STSPreload = true
-        STSSeconds = 315360000
-        CustomFrameOptionsValue = "SAMEORIGIN"
-        ReferrerPolicy = "same-origin"
-        FeaturePolicy = "vibrate 'self'"
