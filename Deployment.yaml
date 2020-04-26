@@ -24,8 +24,6 @@ spec:
           volumeMounts:
             - name: traefik-config
               mountPath: /config/
-            - name: traefik-custom
-              mountPath: /custom/
             - name: traefik-certs
               mountPath: /certs/
           ports:
@@ -39,9 +37,6 @@ spec:
         - name: traefik-config
           configMap:
             name: traefik-config
-        - name: traefik-custom
-          configMap:
-            name: traefik-custom
         - name: traefik-certs
           persistentVolumeClaim:
             claimName: traefik-certs
