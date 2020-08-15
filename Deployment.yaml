@@ -6,7 +6,7 @@ metadata:
   labels:
     app: traefik-ingress
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: traefik-ingress
@@ -16,6 +16,8 @@ spec:
         app: traefik-ingress
     spec:
       serviceAccountName: traefik-ingress
+      nodeSelector:
+        node-role.kubernetes.io/master: "true"
       containers:
         - name: traefik
           image: traefik:2.2
