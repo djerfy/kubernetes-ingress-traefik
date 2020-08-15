@@ -7,6 +7,6 @@ roleRef:
   kind: ClusterRole
   name: traefik-ingress
 subjects:
-  - kind: ServiceAccount
-    name: traefik-ingress
-    namespace: kube-system
+- kind: ServiceAccount
+  name: traefik-ingress
+  namespace: kube-system
